@@ -14,7 +14,7 @@ info:
     name: Stock
     url: https://ciboapp.me/
 host: virtserver.swaggerhub.com
-basePath: /mayuri_2020/stock-deduction-api/1.0.0
+basePath: https://ciboapp.me/api/inventory/v1
 tags:
 - name: Stock Deduction
   description: To deduct stock
