@@ -1,0 +1,729 @@
+---
+swagger: "2.0"
+info:
+  description: This is the inventory system where in you can add, update, read and delete inventory data.
+  version: 1.0.0
+  title: Inventory
+  x-logo:
+    url: "https://www.zotto.io/wp-content/uploads/2020/04/purple1-160x56@2x.png"
+    backgroundColor: "#FFFFFF"
+    altText: "Zotto Api's Documentation"
+  contact:
+    email: info@ciboapp.com
+  license:
+    name: Stock
+    url: https://ciboapp.me/
+host: virtserver.swaggerhub.com
+basePath: /mayuri_2020/stock-deduction-api/1.0.0
+tags:
+- name: Stock Deduction
+  description: To deduct stock
+- name: Inventory App
+  description: To add, update, delete, purchase stock
+schemes:
+- https
+paths:
+  /update_stock:
+    post:
+      tags:
+      - Stock Deduction
+      summary: deduct stock from inventory data
+      description: deduct stock using restaurant id and order id
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: restaurantId
+        description: ID of restaurant
+        required: true
+        schema:
+          $ref: '#/definitions/orderData'
+      responses:
+        "200":
+          description: stock deducted for respective order id
+        "201":
+          description: error while stock deduction, order id not found, product id not found, stodck is already deducted
+  /merchant/login:
+    post:
+      tags:
+      - Inventory App
+      summary: to login this app
+      description: for login need to pass username and password
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: loginCrentials
+        description: credentials to login app
+        required: true
+        schema:
+          $ref: '#/definitions/loginData'
+      responses:
+        "200":
+          description: stock deducted for respective order id
+        "201":
+          description: error while stock deduction, order id not found, product id not found, stodck is already deducted
+  /products/categoryList:
+    get:
+      tags:
+      - Inventory App
+      summary: category list
+      description: This api will send response as category list of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaruant id to get category data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: category list fetch successfully
+        "201":
+          description: category not added, restaurant id is wrong
+  /products/productList:
+    get:
+      tags:
+      - Inventory App
+      summary: product list
+      description: This api will send response as product list of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaruant id to get product data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: product list fetch successfully
+        "201":
+          description: product not added, restaurant id is wrong
+  /products/inventoryList:
+    get:
+      tags:
+      - Inventory App
+      summary: inventory list
+      description: This api will send response as inventory list of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaruant id to get product data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: inventory data fetch successfully
+        "201":
+          description: data not added,  restaurant id is wrong
+  /products/addSupplier:
+    post:
+      tags:
+      - Inventory App
+      summary: add a new supplier
+      description: to add new supplier to system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: supplier_data
+        description: supplier details like name, email, phone...
+        required: true
+        schema:
+          $ref: '#/definitions/supplierData'
+      responses:
+        "200":
+          description: supplier added
+        "201":
+          description: error while adding supplier,
+  /products/updateSupplier:
+    post:
+      tags:
+      - Inventory App
+      summary: update a existing supplier
+      description: to adpdate existing supplier to system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: supplier_data
+        description: supplier details like name, email, phone...
+        required: true
+        schema:
+          $ref: '#/definitions/updateSupplierData'
+      responses:
+        "200":
+          description: supplier updated
+        "201":
+          description: error while updating supplier, restaurant id is wrong, supplier details are missing
+  /products/supplierList:
+    get:
+      tags:
+      - Inventory App
+      summary: supplier list
+      description: This api will send response as supplier list of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaruant id to get supplier data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: supplier data fetch successfully
+        "201":
+          description: data not added,  restaurant id is wrong
+  /products/supplierDetails:
+    get:
+      tags:
+      - Inventory App
+      summary: supplier details
+      description: This api will send response as supplier data of suupplier of respective inventory using supplier id
+      produces:
+      - application/json
+      parameters:
+      - name: supplier_id
+        in: query
+        description: pass supplier_id id to get supplier data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: supplier data fetch successfully
+        "201":
+          description: data not added,  supplier id is wrong
+  /purchase/addPurchase:
+    post:
+      tags:
+      - Inventory App
+      summary: add new purchase
+      description: to add new purchase to inventory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: purchaseData
+        description: purchase data like product details, quantity, cost etc
+        required: true
+        schema:
+          $ref: '#/definitions/purchaseData'
+      responses:
+        "200":
+          description: purchase added
+        "201":
+          description: error while adding purchase, restaurant_id is wrong, product id is missing/ data missing
+  /purchase/updatePurchase:
+    post:
+      tags:
+      - Inventory App
+      summary: update existing purchase data
+      description: update existing purchase data to inventory
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: purchaseData
+        description: update purchase data like product details, quantity, cost etc if existing product_id is not passed then it will auto delete from respective purchase id
+        required: true
+        schema:
+          $ref: '#/definitions/updatePurchaseData'
+      responses:
+        "200":
+          description: purchase updated
+        "201":
+          description: error while updating purchase, restaurant_id is wrong, product id is missing/ data missing
+  /purchase/cancelPurchase:
+    post:
+      tags:
+      - Inventory App
+      summary: cancelled purchase
+      description: cancelled existing purchase
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: purchaseData
+        description: cancelled a purchase using existing purchase id
+        required: true
+        schema:
+          $ref: '#/definitions/cancelledPurchaseData'
+      responses:
+        "200":
+          description: purchase cancelled
+        "201":
+          description: error while cancelling purchase, restaurant_id is wrong, purchase id is missing/ data missing
+  /products/purchaseList:
+    get:
+      tags:
+      - Inventory App
+      summary: purchase list
+      description: This api will send response as purchase list of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaruant id to get supplier data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: purchase data fetch successfully
+        "201":
+          description: data not added,  restaurant id is wrong
+  /products/getLocation:
+    get:
+      tags:
+      - Inventory App
+      summary: warehouse list
+      description: This api will send response as warehouse data of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaurant id to get warehouse data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: warehouse data fetch successfully
+        "201":
+          description: data not added,  restaurant id is wrong
+  /products/getTaxList:
+    get:
+      tags:
+      - Inventory App
+      summary: tax list
+      description: This api will send response as tax data of respective inventory using restaurant id
+      produces:
+      - application/json
+      parameters:
+      - name: restaurant_id
+        in: query
+        description: pass restaurant id to get tax data
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: tax data fetch successfully
+        "201":
+          description: data not added,  restaurant id is wrong
+  /products/refillStock:
+    post:
+      tags:
+      - Inventory App
+      summary: add remaining/pending stock to exsting product
+      description: add remaining/pending stock to exsting product from another warehouse/location
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: stock_data
+        description: stock details like product_id, warehouse_id and quantity
+        required: true
+        schema:
+          $ref: '#/definitions/refillStockData'
+      responses:
+        "200":
+          description: stock quantity updated
+        "201":
+          description: error while updating stock quantity,
+  /products/changeLocation:
+    post:
+      tags:
+      - Inventory App
+      summary: change location of any product from one warehouse to another
+      description: update product location/warehouse using existing and new warehouse id with quantity
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: stock_data
+        description: stock details like product_id, warehouse_idfrom, warehouse_idTo and quantity, restaurant_id
+        required: true
+        schema:
+          $ref: '#/definitions/changeLocationData'
+      responses:
+        "200":
+          description: stock location/warehhouse updated
+        "201":
+          description: error while changing stock location/warehouse,
+  /products/updateWastage:
+    post:
+      tags:
+      - Inventory App
+      summary: update wastage stock details
+      description: add wastage stock details
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: stock_data
+        description: update wastage stock
+        required: true
+        schema:
+          $ref: '#/definitions/updateWastageStockData'
+      responses:
+        "200":
+          description: stock quantity updated
+        "201":
+          description: error while updating stock quantity,
+  /products/emptyStock:
+    post:
+      tags:
+      - Inventory App
+      summary: empty all product data from warehouse
+      description: empty all product data from respective warehouse
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: stock_data
+        description: empty warehouse data
+        required: true
+        schema:
+          $ref: '#/definitions/emptyStockData'
+      responses:
+        "200":
+          description: all stocked removed
+        "201":
+          description: error while updating stock quantity,
+definitions:
+  orderData:
+    type: object
+    required:
+    - order_id
+    - restaurantId
+    properties:
+      restaurantId:
+        type: integer
+        example: 126544
+      order_id:
+        type: integer
+        example: 25698
+  loginData:
+    type: object
+    required:
+    - password
+    - username
+    properties:
+      username:
+        type: string
+        example: abcd
+      password:
+        type: string
+        example: test
+  supplierData:
+    type: object
+    required:
+    - address
+    - city
+    - company
+    - email
+    - name
+    - phone
+    - restaurantId
+    - state
+    properties:
+      restaurantId:
+        type: integer
+        example: 123654
+      company:
+        type: string
+        example: xyz
+      name:
+        type: string
+        example: abc
+      email:
+        type: string
+        example: abc@mydomain.com
+      phone:
+        type: integer
+        example: 1865742
+      address:
+        type: string
+        example: 202, dummy text, dummy text 000 000
+      state:
+        type: string
+        example: my-state
+      city:
+        type: string
+        example: my-city
+      country:
+        type: string
+        example: my-country
+      postal_code:
+        type: integer
+        example: 987456
+      gst_no:
+        type: integer
+        example: 3987456987456321
+      vat:
+        type: string
+        example: "12.2"
+  updateSupplierData:
+    type: object
+    required:
+    - address
+    - city
+    - company
+    - email
+    - name
+    - phone
+    - restaurantId
+    - state
+    - supplier_id
+    properties:
+      restaurantId:
+        type: integer
+        example: 123654
+      company:
+        type: string
+        example: xyz
+      name:
+        type: string
+        example: abc
+      email:
+        type: string
+        example: abc@mydomain.com
+      phone:
+        type: integer
+        example: 1865742
+      address:
+        type: string
+        example: 202, dummy text, dummy text 000 000
+      state:
+        type: string
+        example: my-state
+      city:
+        type: string
+        example: my-city
+      country:
+        type: string
+        example: my-country
+      postal_code:
+        type: integer
+        example: 987456
+      gst_no:
+        type: integer
+        example: 3987456987456321
+      vat:
+        type: string
+        example: "12.2"
+      supplier_id:
+        type: integer
+        example: 52
+  purchaseData:
+    type: object
+    required:
+    - date
+    - products
+    - restaurant_id
+    - supplier_id
+    - supplier_name
+    - type
+    properties:
+      restaurant_id:
+        type: integer
+        example: 123654
+      date:
+        type: string
+        format: datetime
+        example: 2020-07-30 15:55:12
+      supplier_name:
+        type: string
+        example: supplier_name
+      supplier_id:
+        type: integer
+        example: 65987
+      type:
+        type: string
+        example: save
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/purchaseProductData'
+  purchaseProductData:
+    type: object
+    required:
+    - cost
+    - id
+    - name
+    - quantity
+    properties:
+      cost:
+        type: string
+        example: "350.5"
+      id:
+        type: integer
+        example: 5
+      name:
+        type: string
+        example: product_name
+      quantity:
+        type: string
+        example: "566"
+  updatePurchaseData:
+    type: object
+    required:
+    - date
+    - products
+    - purchase_id
+    - restaurant_id
+    - status
+    - supplier_id
+    - supplier_name
+    - type
+    properties:
+      restaurant_id:
+        type: integer
+        example: 123654
+      date:
+        type: string
+        format: datetime
+        example: 2020-07-30 15:55:12
+      supplier_name:
+        type: string
+        example: suppliername
+      supplier_id:
+        type: integer
+        example: 65987
+      type:
+        type: string
+        example: save
+      products:
+        type: array
+        items:
+          $ref: '#/definitions/purchaseProductData'
+      purchase_id:
+        type: integer
+        example: 5
+      status:
+        type: string
+        example: Ordered
+  cancelledPurchaseData:
+    type: object
+    required:
+    - cancelled_date
+    - purchase_id
+    - restaurant_id
+    properties:
+      cancelled_date:
+        type: string
+        format: datetime
+        example: 2020-07-07 05:20:10
+      restaurant_id:
+        type: integer
+        example: 23
+      purchase_id:
+        type: integer
+        example: 6
+  refillStockData:
+    type: object
+    required:
+    - product_id
+    - quantity
+    - restaurant_id
+    - warehouse_id
+    properties:
+      product_id:
+        type: integer
+        example: 5
+      restaurant_id:
+        type: integer
+        example: 23
+      warehouse_id:
+        type: integer
+        example: 6
+      quantity:
+        type: string
+        example: "250"
+  changeLocationData:
+    type: object
+    required:
+    - product_id
+    - quantity
+    - restaurant_id
+    - warehouseFrom_id
+    - warehouseTo_id
+    properties:
+      product_id:
+        type: integer
+        example: 5
+      restaurant_id:
+        type: integer
+        example: 23
+      warehouseFrom_id:
+        type: integer
+        example: 3
+      warehouseTo_id:
+        type: integer
+        example: 6
+      quantity:
+        type: string
+        example: "50"
+  updateWastageStockData:
+    type: object
+    required:
+    - product_id
+    - quantity
+    - restaurant_id
+    - warehouse_id
+    properties:
+      product_id:
+        type: integer
+        example: 5
+      restaurant_id:
+        type: integer
+        example: 23
+      warehouse_id:
+        type: integer
+        example: 6
+      quantity:
+        type: string
+        example: "250"
+  emptyStockData:
+    type: object
+    required:
+    - product_id
+    - restaurant_id
+    - warehouse_id
+    properties:
+      product_id:
+        type: integer
+        example: 5
+      restaurant_id:
+        type: integer
+        example: 23
+      warehouse_id:
+        type: integer
+        example: 6
